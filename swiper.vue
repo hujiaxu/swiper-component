@@ -3,18 +3,12 @@
     <div class="swiper">
         <div
             class="swiper-container"
+            ref="swiperContainer"
             @touchstart="touchstart"
             @touchmove="touchmove"
             @touchend="touchend"
         >
-            <div 
-                class="swiper-item"
-                :class="activeIndex === index ? 'swiper-item-active' : ''"
-                v-for="(item, index) in swiperArr"
-                :key="index"
-            >
-                <slot>20210716</slot>
-            </div>
+            <slot></slot>
         </div>
         <div class="dots" v-if="showDots">
             <div 
@@ -39,6 +33,10 @@
             showDots: { // 是否显示小圆点
                 type: Boolean,
                 default: true,
+            },
+            activeItemHeight: {
+                type: String,
+                default: '300px'
             }
         },
         data() {
@@ -64,7 +62,7 @@
             this.X = 0                                                      // 初始值，记录手指 touchstart 时的 x坐标
             this.moveX = 0                                                  // 过程变化值，手指滑动时 相对 this.X 的 偏移距离
             this.moveFlag = this.width / 3                                  // 偏移的闸阀，超过这个值才会进行 整个 width 距离的偏移，否则回到原位
-            console.log(document.querySelector('.test'))
+            console.log(this.$refs.swiperContainer.children[0].classList)
         },
         methods: {
             // 在 touchstart,touchmove,touchend三个函数中
@@ -115,8 +113,6 @@
                         }
                     }
                     this.activeIndex = step
-                    this.itemEls[this.activeIndex].style.height = this.heightActive + 'px'
-                    this.itemEls[1 - this.activeIndex].style.height = this.height + 'px'
                 }
             },
             vtouchend() {
